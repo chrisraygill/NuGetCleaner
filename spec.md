@@ -6,17 +6,21 @@
 * Once it is reviewed and signed off, a Manager or PM will move it to the Reviewed section.
 
 ## Issue
-Link to the GitHub issue that tracks the work and discussion.
+TBD
 
 ## Problem
-_What is the problem(s) we are trying to solve? Why is it a problem. What horrible workarounds are we subjecting our users too._
-
+There is currently no automated process to delete .npkg files from the Global Package Folder that are no longer needed/relevant. This presents a storage ineffiency that can be potentially significant for customers with very large or very many packages that are no longer in use. Customers who experience this problem currently must find the GPS folder themselves and delete the unwanted files manually.
 ## Who is the customer?
-_Who is the customer that is running into the problem. Which customers would dance for joy and donate to save the space unicorns foundation on getting this feature. Customers here could be individuals, nuget customer segments (package authors, consumers), enterprises, partners within Microsoft, external partners etc..._
+Any .NET developer that installs packages (i.e. every .NET developer).
 
 ## Evidence
-_What is the evidence that behaves us to act?_
-_Evidence can be impassioned tweets or mails, mile long conversations in issues, rants on blogs, sweet sweet data from telemetry!!! If you can show pain, you can rally the troops._
+At the moment, my evidence is that Karan says he has seen complaints from customers about this issue. Exact evidence TBD.
 
 ## Solution
-_Detailed explanation of the solution. The more pictures/code snippets based on the feature the merrier. Pictures keep folks awake when reading specs._
+
+The soltuion will come in a form on a downloadable .NET CLI tool. The first version of this tool will be very simple and follow the steps oulined below:
+
+1. User invokes "clean" command
+2. GPS file metadata is checked for most recent read
+3. Files with read date > 30 days will be deleted
+4. List of deleted files will be printed to console
