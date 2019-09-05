@@ -8,5 +8,7 @@ namespace NuGetCleaner
         {
             Console.WriteLine("Hello World!");
         }
+
+        // this is a comment I think
     }
 }
