@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 
 namespace NuGetCleaner
@@ -7,25 +8,27 @@ namespace NuGetCleaner
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            Console.Write("Enter a dir path");
-            var dir = Console.ReadLine();
-            DirectorySearch(dir);
-
-        }
-
-        public static void DirectorySearch(string dir)
-        {
             try
             {
-                foreach (string f in Directory.GetFiles(dir))
+                if (args[0] == "clean")
                 {
-                    Console.WriteLine(Path.GetFileName(f) + "  ---  " + File.GetLastWriteTime(f));
+                    int setting = CheckDisableLastAccess();
+
+                    if (setting != 2)
+                    {
+                        Console.Write("Last access updates are not currently enabled. Please follow instructions at ... to enable them.");
+                        System.Environment.Exit(0);
+                    }
+
+                    Console.Write("Enter a dir path: ");
+                    var dir = Console.ReadLine();
+                    Console.Write("Enter max package age (min.): ");
+                    var maxAge = Convert.ToInt32(Console.ReadLine());
+                    DirectorySearch(dir, maxAge);
                 }
-                foreach (string d in Directory.GetDirectories(dir))
+                else
                 {
-                    Console.WriteLine(Path.GetFileName(d));
-                    DirectorySearch(d);
+                    Console.Write(args[0] + "is not a recognized command");
                 }
             }
             catch (System.Exception ex)
@@ -34,8 +37,43 @@ namespace NuGetCleaner
             }
         }
 
-        //var lastModified = System.IO.File.GetLastWriteTime("C:\foo.bar");
+        public static int CheckDisableLastAccess()
+        {
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.UseShellExecute = false;
+            startInfo.RedirectStandardOutput = true;
+            startInfo.FileName = "CMD.exe";
+            startInfo.Arguments = "/c fsutil behavior query disablelastaccess";
+            process.StartInfo = startInfo;
+            process.Start();
+            string output = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
 
-        //Console.WriteLine(lastModified.ToString("dd/MM/yy HH:mm:ss"));
+            string[] outputArray = output.Split("");
+            int setting = Convert.ToInt32(outputArray[2]);
+
+            return setting;
+        }
+
+        public static void DirectorySearch(string dir, int maxAge)
+        {
+            try
+            {
+                foreach (string f in Directory.GetFiles(dir))
+                {
+                    var fileAge = DateTime.Now - File.GetLastAccessTime(f);
+
+                    if(fileAge.TotalMinutes > maxAge)
+                    {
+                        Console.WriteLine(Path.GetFileName(f));
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
     }
 }
