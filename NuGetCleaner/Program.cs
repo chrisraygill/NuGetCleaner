@@ -1,5 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
+using System.Reflection;
 using System.IO;
 
 namespace NuGetCleaner
@@ -12,19 +12,16 @@ namespace NuGetCleaner
             {
                 if (args[0] == "clean")
                 {
-                    int setting = CheckDisableLastAccess();
-
-                    if (setting != 2)
-                    {
-                        Console.Write("Last access updates are not currently enabled. Please follow instructions at ... to enable them.");
-                        System.Environment.Exit(0);
-                    }
-
                     Console.Write("Enter a dir path: ");
                     var dir = Console.ReadLine();
-                    Console.Write("Enter max package age (min.): ");
-                    var maxAge = Convert.ToInt32(Console.ReadLine());
-                    DirectorySearch(dir, maxAge);
+                    if (CheckDisableLastAccess() != 2)
+                    {
+                        Console.Write("Last access updates are not currently enabled. Please follow instructions at ... to enable them.");
+                    }
+
+                    Console.Write("Enter max package age (seconds): ");
+                    var maxDays = Convert.ToInt32(Console.ReadLine());
+                    DirectorySearch(dir, maxDays);
                 }
                 else
                 {
@@ -50,23 +47,35 @@ namespace NuGetCleaner
             string output = process.StandardOutput.ReadToEnd();
             process.WaitForExit();
 
-            string[] outputArray = output.Split("");
+            string[] outputArray = output.Split(" ");
             int setting = Convert.ToInt32(outputArray[2]);
 
             return setting;
         }
 
-        public static void DirectorySearch(string dir, int maxAge)
+        public static void DirectorySearch(string dir, int maxDays)
         {
             try
             {
-                foreach (string f in Directory.GetFiles(dir))
-                {
-                    var fileAge = DateTime.Now - File.GetLastAccessTime(f);
 
-                    if(fileAge.TotalMinutes > maxAge)
+                Console.WriteLine("Deleted Packages: ");
+
+                foreach (string pkg in Directory.GetDirectories(dir))
+                {
+                    foreach (string pkgVersion in Directory.GetDirectories(pkg))
                     {
-                        Console.WriteLine(Path.GetFileName(f));
+                        var dirAge = DateTime.Now - Directory.GetLastAccessTime(pkgVersion);
+
+                        if (dirAge.TotalSeconds > maxDays)
+                        {
+                            Console.WriteLine(Path.GetFileName(pkgVersion));
+                            Directory.Delete(pkgVersion);
+
+                            if (Directory.GetDirectories(pkg).Length == 0)
+                            {
+                                Directory.Delete(pkg);
+                            }
+                        }
                     }
                 }
             }
