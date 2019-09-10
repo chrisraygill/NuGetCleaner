@@ -26,16 +26,18 @@ namespace NuGetCleaner
 
                 if (args[0] == "clean")
                 {
-                    Console.Write("Enter a dir path: ");
-                    var dir = Console.ReadLine();
+                    //Console.Write("Enter a dir path: ");
+                    //var dir = Console.ReadLine();
 
-                    Console.Write("Enter max package age (seconds): ");
+                    var dir = "C:\\Users\\chgill\\.nuget\\packages";
+
+                    Console.Write("Enter max package age (Days): ");
                     var maxDays = Convert.ToInt32(Console.ReadLine());
                     DirectorySearch(dir, maxDays);
                 }
                 else
                 {
-                    Console.Write(args[0] + "is not a recognized command");
+                    Console.Write(args[0] + " is not a recognized command");
                 }
             }
             catch (System.Exception ex)
@@ -76,7 +78,7 @@ namespace NuGetCleaner
                     {
                         var dirAge = DateTime.Now - Directory.GetLastAccessTime(pkgVersion);
 
-                        if (dirAge.TotalSeconds > maxDays)
+                        if (dirAge.TotalDays > maxDays)
                         {
                             Console.WriteLine(Path.GetFileName(pkgVersion));
                             Directory.Delete(pkgVersion);
