@@ -10,14 +10,24 @@ namespace NuGetCleaner
         {
             try
             {
+                if (args.Length == 0)
+                {
+                    var versionString = Assembly.GetEntryAssembly()
+                                            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                                            .InformationalVersion
+                                            .ToString();
+
+                    Console.WriteLine($"NuGetCleaner v{versionString}");
+                    Console.WriteLine("-------------");
+                    Console.WriteLine("\nUsage:");
+                    Console.WriteLine("  NuGetCleaner <message>");
+                    return;
+                }
+
                 if (args[0] == "clean")
                 {
                     Console.Write("Enter a dir path: ");
                     var dir = Console.ReadLine();
-                    if (CheckDisableLastAccess() != 2)
-                    {
-                        Console.Write("Last access updates are not currently enabled. Please follow instructions at ... to enable them.");
-                    }
 
                     Console.Write("Enter max package age (seconds): ");
                     var maxDays = Convert.ToInt32(Console.ReadLine());
