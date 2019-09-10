@@ -29,7 +29,12 @@ namespace NuGetCleaner
                     //Console.Write("Enter a dir path: ");
                     //var dir = Console.ReadLine();
 
-                    var dir = "C:\\Users\\chgill\\.nuget\\packages";
+                    var dir = "C:\\Users\\" + Environment.UserName + "\\.nuget\\packages";
+
+                    if (args.Length > 1)
+                    {
+                        dir = args[1];
+                    }
 
                     Console.Write("Enter max package age (Days): ");
                     var maxDays = Convert.ToInt32(Console.ReadLine());
