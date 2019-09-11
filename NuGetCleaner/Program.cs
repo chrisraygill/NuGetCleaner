@@ -52,8 +52,8 @@ namespace NuGetCleaner
                     Console.Write("Enter max package age (Days): ");
                     var maxDays = Convert.ToInt32(Console.ReadLine());
 
-                    //SearchAndDestroy(dir, maxDays);
-                    SearchAndPrint(dir, maxDays);
+                    SearchAndDestroy(dir, maxDays);
+                    //SearchAndPrint(dir, maxDays);
                 }
                 else
                 {
@@ -101,7 +101,7 @@ namespace NuGetCleaner
                     {
                         var dirAge = DateTime.Now - RecursiveFindLAT(pkgVersion, DateTime.MinValue);
 
-                        if (dirAge.TotalSeconds >= maxDays)
+                        if (dirAge.TotalDays >= maxDays)
                         {
                             Console.WriteLine(pkgVersion);
                             RecursiveDelete(pkgVersion);
@@ -135,7 +135,7 @@ namespace NuGetCleaner
 
                         var dirAge = DateTime.Now - RecursiveFindLAT(pkgVersion, DateTime.MinValue);
 
-                        if (dirAge.TotalSeconds >= maxDays)
+                        if (dirAge.TotalDays >= maxDays)
                         {
                             Console.WriteLine(pkgVersion + " --- " + RecursiveFindLAT(pkgVersion, DateTime.MinValue) + " --- Deleted");
                         }
