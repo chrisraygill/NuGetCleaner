@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Reflection;
 using System.IO;
+using System.Threading;
+using Newtonsoft;
 
 namespace NuGetCleaner
 {
@@ -26,8 +28,19 @@ namespace NuGetCleaner
 
                 if (args[0] == "clean")
                 {
-                    //Console.Write("Enter a dir path: ");
-                    //var dir = Console.ReadLine();
+                    
+   
+
+                    var setting = CheckDisableLastAccess();
+
+                    if (setting == 1 || setting == 3)
+                    {
+                        Console.WriteLine("Your Last Access updates are not currently enabled so this tool will not work");
+                        Console.WriteLine("To enable Last Access updates, run powershell as administrator and type:");
+                        Console.WriteLine("  fsutil behavior set disablelastaccess 2");
+                        Console.WriteLine("note: enabling this setting may incur some performance overhead");
+                        return;
+                    }
 
                     var dir = "C:\\Users\\" + Environment.UserName + "\\.nuget\\packages";
 
@@ -38,7 +51,9 @@ namespace NuGetCleaner
 
                     Console.Write("Enter max package age (Days): ");
                     var maxDays = Convert.ToInt32(Console.ReadLine());
-                    DirectorySearch(dir, maxDays);
+
+                    //SearchAndDestroy(dir, maxDays);
+                    SearchAndPrint(dir, maxDays);
                 }
                 else
                 {
@@ -70,10 +85,13 @@ namespace NuGetCleaner
             return setting;
         }
 
-        public static void DirectorySearch(string dir, int maxDays)
+        public static void SearchAndDestroy(string dir, int maxDays)
         {
             try
             {
+                var it = 1;
+
+                Console.WriteLine(DateTime.Now);
 
                 Console.WriteLine("Deleted Packages: ");
 
@@ -81,12 +99,12 @@ namespace NuGetCleaner
                 {
                     foreach (string pkgVersion in Directory.GetDirectories(pkg))
                     {
-                        var dirAge = DateTime.Now - Directory.GetLastAccessTime(pkgVersion);
+                        var dirAge = DateTime.Now - RecursiveFindLAT(pkgVersion, DateTime.MinValue);
 
-                        if (dirAge.TotalDays > maxDays)
+                        if (dirAge.TotalSeconds >= maxDays)
                         {
-                            Console.WriteLine(Path.GetFileName(pkgVersion));
-                            Directory.Delete(pkgVersion);
+                            Console.WriteLine(pkgVersion);
+                            RecursiveDelete(pkgVersion);
 
                             if (Directory.GetDirectories(pkg).Length == 0)
                             {
@@ -100,6 +118,73 @@ namespace NuGetCleaner
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        public static void SearchAndPrint(string dir, int maxDays)
+        {
+            try
+            {
+                Console.WriteLine(DateTime.Now);
+
+                Console.WriteLine("Deleted Packages: ");
+
+                foreach (string pkg in Directory.GetDirectories(dir))
+                {
+                    foreach (string pkgVersion in Directory.GetDirectories(pkg))
+                    {
+
+                        var dirAge = DateTime.Now - RecursiveFindLAT(pkgVersion, DateTime.MinValue);
+
+                        if (dirAge.TotalSeconds >= maxDays)
+                        {
+                            Console.WriteLine(pkgVersion + " --- " + RecursiveFindLAT(pkgVersion, DateTime.MinValue) + " --- Deleted");
+                        }
+                        else
+                        {
+                            Console.WriteLine(pkgVersion + " --- " + RecursiveFindLAT(pkgVersion, DateTime.MinValue));
+                        }
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public static void RecursiveDelete(string dir)
+        {
+            foreach (string subdir in Directory.GetDirectories(dir))
+            {
+                RecursiveDelete(subdir);
+            }
+            foreach (string subdir in Directory.GetDirectories(dir))
+            {
+                Directory.Delete(subdir);
+            }
+            foreach (string f in Directory.GetFiles(dir))
+            {
+                File.Delete(f);
+            }
+            Directory.Delete(dir);
+        }
+
+        public static DateTime RecursiveFindLAT(string dir, DateTime dt)
+        {
+
+            foreach (string subdir in Directory.GetDirectories(dir))
+            {
+                dt = RecursiveFindLAT(subdir, dt);
+            }
+            foreach (string f in Directory.GetFiles(dir))
+            {
+                if (dt < File.GetLastAccessTime(f))
+                {
+                    dt = File.GetLastAccessTime(f);
+                }
+            }
+
+            return dt;
         }
     }
 }
