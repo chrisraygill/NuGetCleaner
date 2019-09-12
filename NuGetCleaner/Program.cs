@@ -26,12 +26,9 @@ namespace NuGetCleaner
 
                 if (args[0] == "clean")
                 {
-                    
-   
-
                     var setting = CheckDisableLastAccess();
 
-                    if (setting == 1 || setting == 3)
+                    if (setting != 2)
                     {
                         Console.WriteLine("Your Last Access updates are not currently enabled so this tool will not work");
                         Console.WriteLine("To enable Last Access updates, run powershell as administrator and type:");
