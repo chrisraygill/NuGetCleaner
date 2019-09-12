@@ -23,10 +23,10 @@ namespace NuGetCleaner
 
                     if (setting != 2)
                     {
-                        Console.WriteLine("Your Last Access updates are not currently enabled so this tool will not work");
-                        Console.WriteLine("To enable Last Access updates, run powershell as administrator and input:");
-                        Console.WriteLine("  fsutil behavior set disablelastaccess 2");
-                        Console.WriteLine("Note: you may be asked to reboot for the settings change to take effect");
+                        Console.WriteLine("\nYour Last Access updates are not currently enabled so this tool will not work");
+                        Console.WriteLine("To enable Last Access updates, run powershell as administrator and input:\n");
+                        Console.WriteLine("  fsutil behavior set disablelastaccess 2\n");
+                        Console.WriteLine("Note: you may be asked to reboot for the settings change to take effect\n");
 
                         return;
                     }
