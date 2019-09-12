@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using System.IO;
-using System.Threading;
-using Newtonsoft;
 
 namespace NuGetCleaner
 {
