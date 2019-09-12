@@ -31,9 +31,10 @@ namespace NuGetCleaner
                     if (setting != 2)
                     {
                         Console.WriteLine("Your Last Access updates are not currently enabled so this tool will not work");
-                        Console.WriteLine("To enable Last Access updates, run powershell as administrator and type:");
+                        Console.WriteLine("To enable Last Access updates, run powershell as administrator and input:");
                         Console.WriteLine("  fsutil behavior set disablelastaccess 2");
-                        Console.WriteLine("note: enabling this setting may incur some performance overhead");
+                        Console.WriteLine("Note: you may be asked to reboot for the settings change to take effect");
+
                         return;
                     }
 
@@ -84,8 +85,6 @@ namespace NuGetCleaner
         {
             try
             {
-                var it = 1;
-
                 Console.WriteLine(DateTime.Now);
 
                 Console.WriteLine("Deleted Packages: ");
