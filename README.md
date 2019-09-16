@@ -37,8 +37,12 @@ nugetcleaner [--dry-run] --days <# of days>
 
 #### Example 1: Delete packages that have not been accessed in 60 or more days.
 
-`nugetcleaner --days 60`
+```bash
+nugetcleaner --days 60
+```
 
 #### Example 2: List packages that have not been accessed in 90 or more days, but don't delete them.
 
-`nugetcleaner --dry-run --days 90`
+```bash
+nugetcleaner --dry-run --days 90
+```
