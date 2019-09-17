@@ -40,7 +40,7 @@ Again, you may be prompted to reboot afterwards for the settings change to take 
 
 `nugetcleaner` works by checking the last access date of all the packages in the global package folder and deleting ones with last access timestamps that exceed the age in days specified by the user. To be clear, it will check each version of a package and delete only the versions that exceed the age. For example, if there are multiple versions in the "newtonsoft.json" folder and only the most recent version has been used within the time constraint, then only the older version will be deleted. The "newtonsoft.json" parent directory will remain with the lastest version. However, if none of the versions were used within the time constraint, then all versions along with the parent folder will be deleted. At the end of the cleaning process, no empty folders will remain.
 
-### Use Warning: 
+#### Use Warning: 
 If the cleaning process is activated immediately after last access updates enabled, before ongoing projects have been updated or built (thus accessing the relevant packages), then deletion will be determined solely by package installation date as last access timestamps wouldn't have had time to update. If this is an undesirable outcome, then it is highly recommended that the user waits until ongoing/relevant projects have been updated or built with last access timestamps enabled before using 'nugetcleaner' to clean out the global package folder. If you're interested in seeing the potential outcome of the cleaning process before going through with it, enable `--dry-run` to see a preview of the packages that would be deleted.
 
 ## Usage
