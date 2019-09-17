@@ -11,6 +11,13 @@ namespace NuGetCleaner
 
         public static void Main(string[] args)
         {
+            var osNameAndVersion = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
+            if (!osNameAndVersion.Contains("Windows"))
+            {
+                Console.WriteLine("This tool is currently only available for Windows, sorry for the inconvenience!\n");
+                return;
+            }
+
             if (CheckDisableLastAccess() != 2)
             {
                 Console.Write("\nYour Last Access updates are not currently enabled so this tool will not work. \n" +
@@ -18,7 +25,8 @@ namespace NuGetCleaner
                     "\tfsutil behavior set disablelastaccess 2\n\n" +
                     "You may be asked to reboot for the settings change to take effect\n\n" +
                     "Note: Last usage time of packages will only be tracked once the setting is enabled.\n" +
-                    "As such, last package usage will only be determined from the enable date onward.\n");
+                    "As such, last package usage will only be determined from the enable date onward.\n" +
+                    "For further information view documentation at https://github.com/chgill-MSFT/NuGetCleaner \n");
                 return;
             }
 
@@ -105,7 +113,7 @@ namespace NuGetCleaner
         {
             try
             {
-                Console.WriteLine("Deleted Packages: ");
+                Console.WriteLine("Deleted Packages: \n");
 
                 foreach (string pkg in Directory.GetDirectories(Path))
                 {
@@ -136,7 +144,9 @@ namespace NuGetCleaner
         {
             try
             {
-                Console.WriteLine("Deleted Packages: ");
+                Console.WriteLine("DRY RUN (NOTHING IS DELETED)");
+
+                Console.WriteLine("Would-Be Deleted Packages: \n");
 
                 foreach (string pkg in Directory.GetDirectories(Path))
                 {
