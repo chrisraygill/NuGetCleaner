@@ -29,7 +29,7 @@ You may be prompted to reboot afterwards for the settings change to take effect.
 
 It should be noted that last access timestamps will only begin to update after the settings change. Therefore, the package last access date will only be tracked from the enable date onward. 
 
-Last access updates were disabled by default starting in Windows Vista in order to increase performance. However, there seems to be little evidence pointing to noticeable performance decreases in more recent Windows OS version when enabling last access updates. However, if you would like to disable last access updates (revert to default) following successfull use of 'nugetcleaner', then run Windows PowerShell or Command Prompt in administrator mode and enter:
+Last access updates were disabled by default starting in Windows Vista in order to increase performance. However, there seems to be little evidence pointing to noticeable performance decreases in more recent Windows OS version when enabling last access updates. However, if you would like to disable last access updates (revert to default) following successfull use of `nugetcleaner`, then run Windows PowerShell or Command Prompt in administrator mode and enter:
 ```bash
 fsutil behavior set disablelastaccess 3
 ```
