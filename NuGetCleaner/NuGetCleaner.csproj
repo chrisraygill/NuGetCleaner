@@ -13,13 +13,16 @@
     <PackageProjectUrl>https://github.com/chgill-MSFT/NuGetCleaner</PackageProjectUrl>
     <RepositoryUrl>https://github.com/chgill-MSFT/NuGetCleaner</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.7</Version>
+    <Version>1.0.8</Version>
+
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <SignAssembly>false</SignAssembly>
     
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.6.0" />
   </ItemGroup>
-  
 
 </Project>
