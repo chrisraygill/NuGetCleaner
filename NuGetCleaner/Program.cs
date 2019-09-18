@@ -3,6 +3,7 @@ using System.Reflection;
 using System.IO;
 using CommandLine;
 using System.ComponentModel;
+using NuGet.Configuration;
 
 namespace NuGetCleaner
 {
@@ -18,6 +19,12 @@ namespace NuGetCleaner
                 return;
             }
 
+            Parser.Default.ParseArguments<Options>(args)
+                .WithParsed(options => Execute(options));
+        }
+
+        public static void Execute(Options options)
+        {
             if (CheckDisableLastAccess() != 2)
             {
                 Console.Write("\nYour Last Access updates are not currently enabled so this tool will not work. \n" +
@@ -30,32 +37,17 @@ namespace NuGetCleaner
                 return;
             }
 
-            Parser.Default.ParseArguments<Options>(args)
-                .WithParsed(options => Execute(options));
-        }
-
-        public static void Execute(Options options)
-        {
-
-            string Path;
-
-            if (options.Path == null)
-            {
-                Path = "C:\\Users\\" + Environment.UserName + "\\.nuget\\packages";
-            }
-            else
-            {
-                Path = options.Path;
-            }
+            var settings = Settings.LoadDefaultSettings(".");
+            var gpfPath = SettingsUtility.GetGlobalPackagesFolder(settings);
 
             int Days = options.Days;
 
             if (options.DryRun)
             {
-                SearchAndPrint(Path, Days);
+                SearchAndPrint(gpfPath, Days);
             }
             else {
-                SearchAndDestroy(Path, Days);
+                SearchAndDestroy(gpfPath, Days);
             }
         }
 
@@ -93,37 +85,6 @@ namespace NuGetCleaner
                         if (dirAge.TotalDays >= Days)
                         {
                             Console.WriteLine(pkgVersion);
-                            RecursiveDelete(pkgVersion);
-
-                            if (Directory.GetDirectories(pkg).Length == 0)
-                            {
-                                Directory.Delete(pkg);
-                            }
-                        }
-                    }
-                }
-            }
-            catch (System.Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
-
-        public static void SearchAndDestroyDR(string Path, int Days)
-        {
-            try
-            {
-                Console.WriteLine("Deleted Packages: \n");
-
-                foreach (string pkg in Directory.GetDirectories(Path))
-                {
-                    foreach (string pkgVersion in Directory.GetDirectories(pkg))
-                    {
-                        var dirAge = DateTime.Now - RecursiveFindLAT(pkgVersion, DateTime.MinValue);
-
-                        if (dirAge.TotalDays >= Days)
-                        {
-                            Console.WriteLine(pkgVersion + " --- Last Access: " + RecursiveFindLAT(pkgVersion, DateTime.MinValue));
                             RecursiveDelete(pkgVersion);
 
                             if (Directory.GetDirectories(pkg).Length == 0)
@@ -187,7 +148,6 @@ namespace NuGetCleaner
 
         public static DateTime RecursiveFindLAT(string dir, DateTime dt)
         {
-
             foreach (string subdir in Directory.GetDirectories(dir))
             {
                 dt = RecursiveFindLAT(subdir, dt);
