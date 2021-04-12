@@ -11,7 +11,7 @@ The Global Packages Folder is where all packages installed through the NuGet pac
 `nugetcleaner` is available as a .NET Core Global Tool:
 
 ```bash
-dotnet tool install --global NuGetCleaner --version 1.0.7
+dotnet tool install --global NuGetCleaner
 ```
 The latest version can also be downloaded directly from NuGet.org at:
 https://www.nuget.org/packages/NuGetCleaner/
