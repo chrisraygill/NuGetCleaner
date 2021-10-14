@@ -1,5 +1,9 @@
 # NuGetCleaner
 
+![image](https://user-images.githubusercontent.com/15097183/115616202-e934c380-a2bd-11eb-9fd1-944de37eb06f.png)
+
+[![Build status](https://ci.appveyor.com/api/projects/status/s0vgb4m8tv9ar7we?svg=true)](https://ci.appveyor.com/project/Autofac/autofac) [![codecov](https://codecov.io/gh/Autofac/Autofac/branch/develop/graph/badge.svg)](https://codecov.io/gh/Autofac/Autofac) [![NuGet](https://img.shields.io/nuget/v/NuGetCleaner.svg)](https://nuget.org/packages/NuGetCleaner) [![Join the chat at https://gitter.im/autofac/autofac](https://img.shields.io/gitter/room/autofac/autofac.svg)](https://gitter.im/autofac/autofac)
+
 ## Description
 
 The Global Packages Folder is where all packages installed through the NuGet package manager tool on Visual Studios are stored. When packages are no longer in use becuase a user has updated their packages for a project or has moved on to other projects, those unused packages remain in the GPF and continue to take up storage. It is not uncommon for the folder to have several Gigabytes of unnecessary package data after long-term use.
