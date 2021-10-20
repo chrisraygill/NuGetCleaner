@@ -2,24 +2,37 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
 
     <PackAsTool>true</PackAsTool>
-    <ToolCommandName>NuGetCleaner</ToolCommandName>
     <PackageOutputPath>./nupkg</PackageOutputPath>
-    <Authors>Christopher Gill</Authors>
-    <Company>Microsoft</Company>
+	  
+	<!-- Package metadata -->
+	<ToolCommandName>NuGetCleaner</ToolCommandName>
+	<Version>1.1.2</Version>
+    <Authors>Chris Gill</Authors>
     <Description>Cleans up Global Package Folder by deleting directories unaccessed for a time greater than a specified threshold.</Description>
     <PackageProjectUrl>https://github.com/chgill-MSFT/NuGetCleaner</PackageProjectUrl>
     <RepositoryUrl>https://github.com/chgill-MSFT/NuGetCleaner</RepositoryUrl>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.8</Version>
-
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <SignAssembly>false</SignAssembly>
-    
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>GPF, global package folder, clean</PackageTags>
+	<PackageIcon>NuGetCleanerIcon.png</PackageIcon>
+	<ReleaseNotes>Added an embedded README!!!</ReleaseNotes>
+	<Copyright>Copyright (c) Chris Gill 2021</Copyright>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Include files in package -->
+    <None Include="..\NuGetCleanerIcon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.6.0" />
