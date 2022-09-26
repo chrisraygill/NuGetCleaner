@@ -118,7 +118,7 @@ namespace NuGetCleaner
 
                         if (dirAge.TotalDays >= Days)
                         {
-                            Console.WriteLine(pkgVersion.Substring(Path.Length + 1) + " --- Last Access: " + RecursiveFindLAT(pkgVersion, DateTime.MinValue));
+                            Console.WriteLine(pkgVersion.Substring(Path.Length) + " --- Last Access: " + RecursiveFindLAT(pkgVersion, DateTime.MinValue));
                         }
                     }
                 }
